@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mybatis-config.xml에서 설정한 변수들을 가져와서 사용하는 member-mapper.xml 파일 -->
+<!-- DB에서 사용할 SQL Query문들 -->
+<mapper namespace="edu.spring.ex04.MemberMapper">
+	<select id="login" resultType="MemberVO">
+		select * from ${test_member}
+		where ${col_userid} = #{userid} and
+			${col_password} = #{password} and
+			${col_active} = 'Y'
+	</select>
+</mapper>

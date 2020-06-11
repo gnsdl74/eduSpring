@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- DB 테이블과 컬럼들을 mapper에 매핑하기 위한 변수 선언(SQL에 사용할 객체, 변수들) -->
+	<!-- mapper에서 사용하기 위한 변수 설정 파일 : mybatis-config.xml -->
+	<properties>
+		<!-- 
+		* property 
+		 - name : mapper.xml에서 사용될 이름
+		 - value : DB 테이블 및 컬럼 이름 -->
+		<!-- member-mapper에서 사용될 property > MemberVO를 bean으로 등록 -->
+		<property name="test_member" value="test_member" />
+		<property name="col_userid" value="userid" />
+		<property name="col_password" value="password" />
+		<property name="col_email" value="email" />
+		<property name="col_active" value="active" />
+		
+	</properties>
+
+	<!-- typeAliases : 해당 package의 하위 객체를 등록하여 클래스명으로만 사용가능하게 함 -->
+	<typeAliases>
+		<package name="edu.spring.ex04.domain" />
+	</typeAliases>
+
+</configuration>
