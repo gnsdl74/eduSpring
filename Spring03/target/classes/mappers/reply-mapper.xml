@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mybatis-config.xml에서 설정한 변수들을 가져와서 사용하는 reply-mapper.xml 파일 -->
+<!-- DB에서 사용할 SQL Query문들 -->
+<mapper namespace="edu.spring.ex03.ReplyMapper">
+	<!-- 게시글에 해당 게시글 번호, 댓글 내용, 아이디 입력 -->
+	<insert id="insert">
+		insert into ${test_reply}(${r_bno}, ${r_content}, ${r_replyid})
+		values (#{bno}, #{content}, #{replyid})
+	</insert>
+	
+	<!-- 게시글 번호에 맞는 댓글들을 내림차순으로 정렬해서 가져오기 -->
+	<select id="select_all_by_bno" resultType="ReplyVO">
+		select * from ${test_reply} where ${r_bno} = #{bno} order by ${r_rno} desc
+	</select>
+	
+	<!-- 해당 댓글의 번호와 아이디로 변경 -->
+	<update id="update">
+		update ${test_reply}
+		set ${r_content} = #{content}
+		where ${r_rno} = #{rno}
+	</update>
+	
+	<!-- 댓글 번호로 삭제 -->
+	<delete id="delete">
+		delete from ${test_reply}
+		where ${r_rno} = #{rno}
+	</delete>
+</mapper>
