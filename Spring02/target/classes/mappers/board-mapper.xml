@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mybatis-config.xml에서 설정한 변수들을 가져와서 사용하는 board-mapper.xml 파일 -->
+<!-- SQL에서 사용할 SQL Query문들 -->
+<mapper namespace="edu.spring.ex02.BoardMapper">
+	<select id="select_all" resultType="BoardVO">
+		select * from ${test_board} order by ${b_bno} desc
+	</select>
+	<!-- 
+	resultType : select를 했을 때 레코드 하나의 타입 // select에는 반드시 필요한 속성
+	- 원래는 패키지 이름을 포함한 전체경로의 클래스 이름을 사용해야 함 > (edu.spring.ex02.domain.BoardVO)
+	- 그러나 mybatis-config.xml에서 typeAliases 속성을 package로
+	   정의했기 때문에 클래스 이름만 사용할 수 있음
+	-->
+	
+	<select id="select_by_bno" resultType="BoardVO">
+		select * from ${test_board} where ${b_bno} = #{bno}
+	</select>
+	<!-- #{} : SpEL(스프링에서 사용하는 Expression Language) : 클라이언트가 입력하는 매개변수와 같음 -->
+	
+	<!-- 게시글을 검색하는 쿼리문 -->
+	<!-- 게시글을 userid로 검색 -->
+	<select id="select_by_userid" resultType="BoardVO">
+		select * from ${test_board} where ${b_userid} like #{userid}
+	</select>
+	
+	<!-- 게시글을  제목 또는 내용으로 검색 
+		 like #{keyword} : '키워드를 포함'하고 있는 title이나 content를 검색
+		 검색 버튼 클릭시 keyword를 전달하고 전달한 키워드로 DAO에 접근,
+		 DB에서 데이터를 select한 후 View에 출력
+	 -->
+	<select id="select_by_title_content" resultType="BoardVO">
+		select * from ${test_board} where ${b_title} like #{keyword} or ${b_content} like #{keyword} order by ${b_bno} desc
+	</select>
+	
+	<insert id="insert">
+		insert into ${test_board}(${b_title}, ${b_content}, ${b_userid})
+		values(#{title}, #{content}, #{userid})
+	</insert>
+	
+	<update id="update">
+		update ${test_board}
+		set ${b_title} = #{title}, ${b_content} = #{content}
+		where ${b_bno} = #{bno}
+	</update>
+	
+	<delete id="delete">
+		delete from ${test_board}
+		where ${b_bno} = #{bno}
+	</delete>
+	
+	<!-- 게시글 전체 개수를 구하는 쿼리문 -->
+	<select id="total_count" resultType="Integer">
+		select count(*) total_cnt from ${test_board}
+	</select>
+	
+	<!-- 게시판 페이징 처리를 위한 쿼리문 -->
+	<select id="paging" resultType="BoardVO">
+		select b.bno, b.title, b.content, b.userid, b.regdate
+		from (
+			select rownum rn, a.* 
+			from (
+				select * from ${test_board} order by ${b_bno} desc
+			) a
+		) b where rn between #{start} and #{end}
+	</select>
+</mapper>
